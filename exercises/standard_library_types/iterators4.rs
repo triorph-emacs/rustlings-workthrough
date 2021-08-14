@@ -1,8 +1,13 @@
 // iterators4.rs
 
-// I AM NOT DONE
-
 pub fn factorial(num: u64) -> u64 {
+    let mut ret: u64 = 1;
+    let mut multiplier: u64 = num;
+    while multiplier > 1 {
+        ret *= multiplier;
+        multiplier = multiplier - 1;
+    }
+    ret
     // Complete this function to return the factorial of num
     // Do not use:
     // - return

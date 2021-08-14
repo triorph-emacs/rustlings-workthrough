@@ -12,8 +12,6 @@ struct Color {
     blue: u8,
 }
 
-// I AM NOT DONE
-
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
 // You need to create an implementation for a tuple of three integers,
@@ -24,21 +22,62 @@ struct Color {
 // Also note that correct RGB color values must be integers in the 0..=255 range.
 
 // Tuple implementation
+//
+use std::fmt::Error;
+//
+fn validate_colour(colour: i16) -> Result<u8, Error> {
+    if colour >= 0 && colour < 256 {
+        Ok(colour as u8)
+    } else {
+        Err(Error)
+    }
+}
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = Box<dyn error::Error>;
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        match (
+            validate_colour(tuple.0),
+            validate_colour(tuple.1),
+            validate_colour(tuple.2),
+        ) {
+            (Ok(red), Ok(green), Ok(blue)) => Ok(Color { red, green, blue }),
+            _ => Err(Box::new(Error)),
+        }
+    }
 }
 
 // Array implementation
 impl TryFrom<[i16; 3]> for Color {
     type Error = Box<dyn error::Error>;
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        match (
+            validate_colour(arr[0]),
+            validate_colour(arr[1]),
+            validate_colour(arr[2]),
+        ) {
+            (Ok(red), Ok(green), Ok(blue)) => Ok(Color { red, green, blue }),
+            _ => Err(Box::new(Error)),
+        }
+    }
 }
 
 // Slice implementation
 impl TryFrom<&[i16]> for Color {
     type Error = Box<dyn error::Error>;
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 {
+            Err(Box::new(Error))
+        } else {
+            match (
+                validate_colour(slice[0]),
+                validate_colour(slice[1]),
+                validate_colour(slice[2]),
+            ) {
+                (Ok(red), Ok(green), Ok(blue)) => Ok(Color { red, green, blue }),
+                _ => Err(Box::new(Error)),
+            }
+        }
+    }
 }
 
 fn main() {

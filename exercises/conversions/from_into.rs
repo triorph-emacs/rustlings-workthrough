@@ -18,6 +18,26 @@ impl Default for Person {
     }
 }
 
+fn get_person(name: &str, age_str: &str) -> Person {
+    let age = age_str.parse::<usize>();
+    match age {
+        Ok(age) => Person {
+            name: String::from(name),
+            age,
+        },
+        Err(_age) => Person::default(),
+    }
+}
+impl From<&str> for Person {
+    fn from(val: &str) -> Person {
+        let mut split = val.split(',');
+        match (split.next(), split.next(), split.next()) {
+            (Some(name), Some(age_str), None) if name != "" => get_person(name, age_str),
+            _ => Person::default(),
+        }
+    }
+}
+
 // Your task is to complete this implementation
 // in order for the line `let p = Person::from("Mark,20")` to compile
 // Please note that you'll need to parse the age component into a `usize`
@@ -32,13 +52,6 @@ impl Default for Person {
 // 5. Extract the other element from the split operation and parse it into a `usize` as the age
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
-
-// I AM NOT DONE
-
-impl From<&str> for Person {
-    fn from(s: &str) -> Person {
-    }
-}
 
 fn main() {
     // Use the `from` function
